@@ -126,3 +126,14 @@ if ($Imported) {
     Write-Error "Task registration failed."
     exit 1
 }
+
+# Import variables declared in local-use-dest.ps1 to place a copy of winlock.ps1 by custom app/window manager.
+. "$PSScriptRoot\local-use-dest.ps1"
+
+# Copy winlock.ps1 to defined path in local-use-dest.ps1 $Destination
+# Create the destination folder if it doesn't exist
+$Source = Join-Path $PSScriptRoot 'winlock.ps1'
+if (-not (Test-Path (Split-Path $Destination))) {
+    New-Item -ItemType Directory -Path (Split-Path $Destination) | Out-Null
+}
+Copy-Item -Path $Source -Destination $Destination | Out-Null
