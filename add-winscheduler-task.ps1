@@ -121,7 +121,7 @@ if ($Imported) {
     Write-Host "  Run As   : $($Imported.Principal.UserId)"
     Write-Host "  Triggers : $(($Imported.Triggers | ForEach-Object { $_.GetType().Name }) -join ', ')"
     Write-Host ""
-    Write-Host "Setup complete. Lock-Workstation.ps1 and the scheduled task no longer need elevation."
+    Write-Host "Setup complete. winlock.ps1 and the scheduled task no longer need elevation."
 } else {
     Write-Error "Task registration failed."
     exit 1
@@ -137,3 +137,9 @@ if (-not (Test-Path (Split-Path $Destination))) {
     New-Item -ItemType Directory -Path (Split-Path $Destination) | Out-Null
 }
 Copy-Item -Path $Source -Destination $Destination | Out-Null
+if (Test-Path $Destination) {
+    Write-Host "winlock.ps1 copied to $Destination successfully."
+} else {
+    Write-Error "Failed to copy winlock.ps1 to $Destination."
+    exit 1
+}
